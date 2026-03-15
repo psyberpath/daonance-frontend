@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useWallet } from "./hooks/useWallet";
 import { Header } from "./components/Header";
+import { Landing } from "./pages/Landing";
 import { Home } from "./pages/Home";
 import { CreateProposal } from "./pages/CreateProposal";
 import { ProposalDetail } from "./pages/ProposalDetail";
@@ -15,7 +16,8 @@ export default function App() {
 
         <main style={{ flex: 1, paddingBottom: 40 }}>
           <Routes>
-            <Route path="/" element={<Home contract={wallet.contract} address={wallet.address} />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/proposals" element={<Home contract={wallet.contract} address={wallet.address} />} />
             <Route path="/create" element={<CreateProposal contract={wallet.contract} address={wallet.address} />} />
             <Route
               path="/proposal/:id"

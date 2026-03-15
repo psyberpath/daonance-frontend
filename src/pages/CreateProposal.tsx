@@ -29,13 +29,17 @@ export function CreateProposal({ contract, address }: CreateProposalProps) {
       
       const tx = await contract.createProposal(title, description, durationSeconds, parseInt(voteLimit));
       await tx.wait();
-      navigate("/");
-    } catch (err: any) {
+      navigate("/proposals");
+    } catch (err: unknown) {
       console.error(err);
       
       // Handle insufficient funds specifically
-      const errorMessage = err?.message?.toLowerCase() || "";
-      if (errorMessage.includes("insufficient funds") || err?.code === "INSUFFICIENT_FUNDS" || err?.error?.message?.includes("insufficient funds")) {
+      const errorMessage = err instanceof Error ? err.message.toLowerCase() : "";
+      if (
+        errorMessage.includes("insufficient funds") || 
+        (err && typeof err === 'object' && 'code' in err && err.code === "INSUFFICIENT_FUNDS") ||
+        (err && typeof err === 'object' && 'error' in err && typeof err.error === 'object' && err.error && 'message' in err.error && typeof err.error.message === 'string' && err.error.message.includes("insufficient funds"))
+      ) {
         setError("You don't have enough SepoliaETH to cover the transaction gas fee. Please get some from a faucet.");
       } else if (errorMessage.includes("user rejected")) {
         setError("Transaction was rejected in your wallet.");
@@ -76,7 +80,7 @@ export function CreateProposal({ contract, address }: CreateProposalProps) {
           <input
             className="input"
             type="text"
-            placeholder="e.g. Increase staking rewards to 12%"
+            placeholder="e.g. Allocation for Privacy Research, DAO Treasury Diversification, Governance V2 Upgrade"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -87,7 +91,10 @@ export function CreateProposal({ contract, address }: CreateProposalProps) {
           <label className="input-label">Description</label>
           <textarea
             className="input textarea"
-            placeholder="Describe the proposal in detail…"
+            placeholder="Describe the proposal. Demo ideas: 
+1. Technical: Upgrade to Zama Protocol V2 for better performance.
+2. Financial: Move 100K USDC to Yearn for yield.
+3. Creative: Commission a new DAOnance NFT collection for early voters."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required

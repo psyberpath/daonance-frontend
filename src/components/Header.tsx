@@ -12,12 +12,9 @@ export function Header({ wallet }: HeaderProps) {
     <header className="header">
       <Link to="/" style={{ textDecoration: "none" }}>
         <div className="header-brand">
-          <div className="header-logo" style={{ borderRadius: 0 }}>
-            Z
-          </div>
           <div>
-            <div className="header-title" style={{ fontFamily: "Inter", letterSpacing: "-1px" }}>DAOnance</div>
-            <div className="header-tagline" style={{ color: "var(--text-secondary)" }}>Powered by Zama</div>
+            <div className="header-title" style={{ fontFamily: "Space Grotesk", letterSpacing: "-1.2px", fontSize: "24px" }}>DAOnance</div>
+            <div className="header-tagline" style={{ color: "var(--accent)", fontSize: "10px", letterSpacing: "2px", fontWeight: 700 }}>PRIVATE ON-CHAIN GOVERNANCE</div>
           </div>
         </div>
       </Link>
