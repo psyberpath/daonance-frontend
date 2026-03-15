@@ -16,7 +16,20 @@ let fhevmInstance: FhevmInstance | null = null;
 async function getInstance(): Promise<FhevmInstance> {
   if (fhevmInstance) return fhevmInstance;
 
-  const { initSDK, createInstance, SepoliaConfig } = await import("@zama-fhe/relayer-sdk/bundle");
+  const pkg = await import("@zama-fhe/relayer-sdk/bundle");
+  
+  // Handle Vite production build dynamic import interop
+  const fallback = pkg as Record<string, unknown>;
+  const defaultExport = fallback.default as Record<string, unknown> | undefined;
+  
+  const initSDK = pkg.initSDK || (typeof defaultExport?.initSDK === 'function' ? defaultExport.initSDK : undefined);
+  const createInstance = pkg.createInstance || (typeof defaultExport?.createInstance === 'function' ? defaultExport.createInstance : undefined);
+  const SepoliaConfig = pkg.SepoliaConfig || defaultExport?.SepoliaConfig;
+
+  if (!initSDK || !createInstance) {
+    throw new Error("Failed to load relayer SDK");
+  }
+
   await initSDK();
 
   fhevmInstance = await createInstance({
