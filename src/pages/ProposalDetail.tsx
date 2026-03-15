@@ -211,18 +211,14 @@ export function ProposalDetail({ contract, address }: ProposalDetailProps) {
                 <button className="vote-btn vote-btn-yes" onClick={() => handleVote(true)} disabled={voting}>
                   {voting ? (
                     <span className="spinner" style={{ color: "var(--green)" }} />
-                  ) : (
-                    <span className="vote-btn-icon">👍</span>
-                  )}
+                  ) : null}
                   <span className="vote-btn-label">Vote Yes</span>
                   <span className="vote-btn-sub">Encrypted with FHE</span>
                 </button>
                 <button className="vote-btn vote-btn-no" onClick={() => handleVote(false)} disabled={voting}>
                   {voting ? (
                     <span className="spinner" style={{ color: "var(--red)" }} />
-                  ) : (
-                    <span className="vote-btn-icon">👎</span>
-                  )}
+                  ) : null}
                   <span className="vote-btn-label">Vote No</span>
                   <span className="vote-btn-sub">Encrypted with FHE</span>
                 </button>
