@@ -5,7 +5,7 @@
  * Falls back gracefully if encryption is unavailable.
  */
 
-import type { FhevmInstance } from "@zama-fhe/relayer-sdk/bundle";
+import { initSDK, createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk/bundle";
 
 let fhevmInstance: FhevmInstance | null = null;
 let sdkInitialized = false;
@@ -16,34 +16,13 @@ let sdkInitialized = false;
 async function getInstance(): Promise<FhevmInstance> {
   if (fhevmInstance) return fhevmInstance;
 
-  const pkg = await import("@zama-fhe/relayer-sdk/bundle");
-  
-  const fallback = pkg as Record<string, unknown>;
-  const defaultExport = fallback.default as Record<string, unknown> | undefined;
-
-  const getFn = (name: string) => fallback[name] || defaultExport?.[name];
-  
-  const initSDK = getFn('initSDK');
-  const createInstance = getFn('createInstance');
-  const SepoliaConfig = getFn('SepoliaConfig') || fallback.SepoliaConfig || defaultExport?.SepoliaConfig;
-
-  if (typeof initSDK !== 'function' || typeof createInstance !== 'function') {
-    throw new Error("Failed to load relayer SDK methods securely");
-  }
-
   if (!sdkInitialized) {
     await initSDK();
     sdkInitialized = true;
   }
 
-  const config = SepoliaConfig as Record<string, unknown>;
-
-  fhevmInstance = await createInstance({
-    ...config,
-    network: window.ethereum as any,
-  });
-  
-  if (!fhevmInstance) throw new Error("Initialization failed");
+  const config = { ...SepoliaConfig, network: window.ethereum as Parameters<typeof createInstance>[0]["network"] };
+  fhevmInstance = await createInstance(config);
   return fhevmInstance;
 }
 
