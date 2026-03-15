@@ -149,7 +149,7 @@ export function ProposalDetail({ contract, address }: ProposalDetailProps) {
 
   return (
     <div>
-      <div className="detail-back" onClick={() => navigate("/")}>
+      <div className="detail-back" onClick={() => navigate("/proposals")}>
         ← Back to proposals
       </div>
 
