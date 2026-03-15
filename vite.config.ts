@@ -5,11 +5,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ["fhevmjs"],
+    include: ["@zama-fhe/relayer-sdk"],
   },
   build: {
     commonjsOptions: {
-      include: [/fhevmjs/, /node_modules/],
+      include: [/@zama-fhe/, /node_modules/],
     },
   },
 });

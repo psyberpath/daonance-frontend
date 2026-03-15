@@ -1,38 +1,29 @@
 /**
  * FHE Vote Encryption Utility
  *
- * Uses @zama-fhe/sdk to encrypt votes with real FHE operations.
+ * Uses @zama-fhe/relayer-sdk to encrypt votes with real FHE operations.
  * Falls back gracefully if encryption is unavailable.
  */
 
-// Declare global fhevm object that may be injected by browser plugins/SDK
-declare global {
-  interface Window {
-    fhevm?: {
-      createEncryptedInput: (
-        contractAddress: string,
-        userAddress: string,
-      ) => {
-        add32: (value: number) => EncryptedInputBuilder;
-      };
-    };
-    fhevmChain?: {
-      createEncryptedInput: (
-        contractAddress: string,
-        userAddress: string,
-      ) => {
-        add32: (value: number) => EncryptedInputBuilder;
-      };
-    };
-  }
-}
+import type { FhevmInstance } from "@zama-fhe/relayer-sdk/bundle";
 
-interface EncryptedInputBuilder {
-  add32: (value: number) => EncryptedInputBuilder;
-  encrypt: () => Promise<{
-    handles: string[];
-    inputProof: string;
-  }>;
+let fhevmInstance: FhevmInstance | null = null;
+
+/**
+ * Lazily initialize the fhEVM relayer SDK instance for Sepolia.
+ * Uses the bundle entry point which packages WASM and workers together.
+ */
+async function getInstance(): Promise<FhevmInstance> {
+  if (fhevmInstance) return fhevmInstance;
+
+  const { initSDK, createInstance, SepoliaConfig } = await import("@zama-fhe/relayer-sdk/bundle");
+  await initSDK();
+
+  fhevmInstance = await createInstance({
+    ...SepoliaConfig,
+    network: window.ethereum as Parameters<typeof createInstance>[0]["network"],
+  });
+  return fhevmInstance;
 }
 
 /**
@@ -48,37 +39,26 @@ export async function encryptVote(
   userAddress: string,
 ): Promise<{ encryptedHandle: string; inputProof: string }> {
   try {
-    // Check if fhevm is available (could be from various sources)
-    let fhevm = window.fhevm || window.fhevmChain;
+    const instance = await getInstance();
 
-    if (!fhevm) {
-      // Try to load from Zama SDK if available
-      try {
-        const module = await import("fhevmjs");
-        if (module && module.createEncryptedInput) {
-          fhevm = {
-            createEncryptedInput: module.createEncryptedInput as any,
-          };
-        }
-      } catch (e) {
-        // SDK not available, will use fallback
-      }
-    }
+    // Create an encrypted input buffer bound to the contract + user
+    const buffer = instance.createEncryptedInput(contractAddress, userAddress);
+    buffer.add32(BigInt(voteValue));
 
-    if (!fhevm || !fhevm.createEncryptedInput) {
-      throw new Error("FHE encryption not available. Please ensure you have the Zama fhEVM provider installed.");
-    }
+    // Encrypt + upload via relayer, returns handles + proof
+    const ciphertexts = await buffer.encrypt();
 
-    // Create encrypted input and add the vote value
-    const encrypted = await fhevm.createEncryptedInput(contractAddress, userAddress).add32(voteValue).encrypt();
-
-    if (!encrypted || !encrypted.handles || !encrypted.handles[0]) {
+    if (!ciphertexts || !ciphertexts.handles || !ciphertexts.handles[0]) {
       throw new Error("Encryption failed: invalid response from FHE provider");
     }
 
+    // SDK returns Uint8Array — convert to hex strings for ethers contract calls
+    const toHex = (bytes: Uint8Array) =>
+      "0x" + Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+
     return {
-      encryptedHandle: encrypted.handles[0],
-      inputProof: encrypted.inputProof || "0x",
+      encryptedHandle: toHex(ciphertexts.handles[0]),
+      inputProof: toHex(ciphertexts.inputProof),
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown encryption error";
@@ -91,5 +71,6 @@ export async function encryptVote(
  * Check if FHE encryption is available in the current environment
  */
 export function isFHEAvailable(): boolean {
-  return !!(window.fhevm || window.fhevmChain);
+  if (typeof window === "undefined") return false;
+  return !!window.ethereum;
 }
