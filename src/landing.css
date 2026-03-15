@@ -1,0 +1,279 @@
+/* ─── Premium Landing Page Styles ───────────────────────────── */
+
+.landing-page {
+  /* Let the landing page break out of the max-width container to be full width */
+  margin: 0 calc(50% - 50vw);
+  width: 100vw;
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Hero ── */
+.hero-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(255, 211, 0, 0.15) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 80px 80px, 80px 80px;
+  background-position: center top, -1px -1px, -1px -1px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 211, 0, 0.1);
+  border: 1px solid rgba(255, 211, 0, 0.2);
+  color: var(--accent);
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero-tag .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  max-width: 900px;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.hero-title span {
+  color: var(--accent);
+  text-shadow: 0 0 40px rgba(255, 211, 0, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  color: #a0a0a0;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  font-weight: 400;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn-premium {
+  padding: 18px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.btn-premium:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 211, 0, 0.2);
+}
+
+.btn-outline {
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  border: 2px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  border-color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+
+/* ── Mockup UI ── */
+.hero-mockup {
+  margin-top: 80px;
+  width: 100%;
+  max-width: 900px;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255, 211, 0, 0.1);
+  position: relative;
+}
+
+.mockup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 16px;
+}
+
+.mockup-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+}
+
+.mockup-badge {
+  color: var(--accent);
+  font-size: 12px;
+  border: 1px solid var(--accent);
+  padding: 4px 8px;
+  font-family: monospace;
+}
+
+.mockup-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #111;
+}
+
+.mockup-label {
+  color: #888;
+  font-size: 14px;
+}
+
+.mockup-value {
+  font-family: monospace;
+  font-size: 16px;
+  color: #fff;
+}
+
+.mockup-encrypted {
+  font-family: monospace;
+  background: #111;
+  color: var(--accent);
+  padding: 8px 12px;
+  letter-spacing: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+  border: 1px solid #222;
+}
+
+/* ── Features ── */
+.features-section {
+  padding: 120px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  margin-bottom: 64px;
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.feature-card {
+  background: #08080a;
+  border: 1px solid #1a1a1a;
+  padding: 40px 32px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--accent);
+  background: #0f0d05;
+  transform: translateY(-4px);
+}
+
+.feature-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  color: rgba(255, 211, 0, 0.2);
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+.feature-name {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.feature-desc {
+  color: #888;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* ── Call to Action ── */
+.cta-section {
+  padding: 120px 24px;
+  text-align: center;
+  background: #0a0a0a;
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.cta-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 40px;
+  margin-bottom: 24px;
+}
+
+.tech-stack {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 64px;
+}
+
+.tech-item {
+  font-family: monospace;
+  font-size: 14px;
+  color: #666;
+  padding: 8px 16px;
+  border: 1px solid #222;
+}
+
+@media (max-width: 768px) {
+  .hero-title { font-size: 48px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .hero-buttons { flex-direction: column; width: 100%; }
+  .btn-premium, .btn-outline { width: 100%; text-align: center; }
+  .hero-mockup { display: none; }
+}
