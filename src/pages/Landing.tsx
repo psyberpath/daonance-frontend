@@ -84,7 +84,7 @@ export function Landing() {
             <div className="feature-number">03</div>
             <h3 className="feature-name">Proof-Verified Reveal</h3>
             <p className="feature-desc">
-              When voting ends, anyone can request a reveal. Tallies are decrypted via the KMS relayer using strict cryptographic signature checks.
+              When voting ends, the creator initiates a reveal. Tallies are decrypted via the KMS relayer using strict cryptographic signature checks, which anyone can permissionlessly finalize on-chain.
             </p>
           </div>
         </div>
