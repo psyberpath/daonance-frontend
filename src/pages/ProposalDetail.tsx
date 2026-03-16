@@ -177,7 +177,17 @@ export function ProposalDetail({ contract, address }: ProposalDetailProps) {
           </div>
           <div className="detail-meta-item">
             <span className="detail-meta-label">Deadline</span>
-            <span className="detail-meta-value">{new Date(proposal.deadline * 1000).toLocaleString()}</span>
+            <span className="detail-meta-value">
+              {new Date(proposal.deadline * 1000).toLocaleString("en-US", {
+                timeZone: "Etc/GMT+12", // GMT+12 in tzdb means UTC-12 (Anywhere on Earth)
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+                timeZoneName: "short"
+              }).replace("GMT-12:00", "AOE")}
+            </span>
           </div>
           <div className="detail-meta-item">
             <span className="detail-meta-label">Privacy</span>
