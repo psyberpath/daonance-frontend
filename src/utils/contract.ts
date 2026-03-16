@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = "0xf511B527619C74d79c869208e5F3CEE47F971670"; // Sepolia
+export const CONTRACT_ADDRESS = "0x3aeFf078884E064A6c460cBcB2332662838B0f44"; // Sepolia
 
 export const DAONANCE_ABI = [
   "function createProposal(string title, string description, uint256 durationSeconds, uint32 voteLimit) external",

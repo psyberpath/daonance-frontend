@@ -81,7 +81,7 @@ export function ProposalDetail({ contract, address }: ProposalDetailProps) {
       // Use real FHE encryption via the SDK
       const { encryptedHandle, inputProof } = await encryptVote(
         voteValue,
-        "0xf511B527619C74d79c869208e5F3CEE47F971670", // CONTRACT_ADDRESS from contract.ts
+        contract.target as string,
         address,
       );
 
