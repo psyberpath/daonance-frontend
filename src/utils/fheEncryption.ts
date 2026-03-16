@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * FHE Vote Encryption Utility
  *
@@ -5,25 +6,36 @@
  * Falls back gracefully if encryption is unavailable.
  */
 
-import { initSDK, createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk/bundle";
+// Since we bypass Vite via CDN, we type the FhevmInstance minimally
+export type FhevmInstance = any;
 
 let fhevmInstance: FhevmInstance | null = null;
 let sdkInitialized = false;
 
 /**
- * Initialize the fhEVM relayer SDK instance for Sepolia.
+ * Initialize the fhEVM relayer SDK instance for Sepolia via CDN.
  */
 async function getInstance(): Promise<FhevmInstance> {
   if (fhevmInstance) return fhevmInstance;
 
+  // Poll for the global script injection to load
+  let retries = 0;
+  while (typeof (window as any).relayerSDK === "undefined") {
+    if (retries > 50) throw new Error("Zama Relayer SDK CDN failed to load");
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    retries++;
+  }
+
+  const relayerSDK = (window as any).relayerSDK;
+
   if (!sdkInitialized) {
-    await initSDK();
+    await relayerSDK.initSDK();
     sdkInitialized = true;
   }
 
-  const config = { ...SepoliaConfig, network: window.ethereum as Parameters<typeof createInstance>[0]["network"] };
-  fhevmInstance = await createInstance(config);
-  return fhevmInstance;
+  const config = { ...relayerSDK.SepoliaConfig, network: window.ethereum };
+  fhevmInstance = await relayerSDK.createInstance(config);
+  return fhevmInstance!;
 }
 
 /**

@@ -11,6 +11,11 @@
     />
   </head>
   <body>
+    <!-- 
+      Loading the FHEVM Relayer SDK via CDN to completely bypass Vite WASM bundling issues.
+      It exposes 'relayerSDK' globally on the window. 
+    -->
+    <script src="https://cdn.zama.org/relayer-sdk-js/0.3.0-8/relayer-sdk-js.umd.cjs" type="text/javascript"></script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
